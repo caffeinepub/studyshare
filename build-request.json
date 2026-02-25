@@ -1,0 +1,85 @@
+{
+  "kind": "build_request",
+  "title": "Delete Notes, Book Upload, and Open Notes in Browser",
+  "projectName": "StudyHub",
+  "priority": "normal",
+  "requirements": [
+    {
+      "id": "REQ-16",
+      "text": "Add a delete note feature: on the Note Detail page (frontend/src/pages/NoteDetailPage.tsx), display a 'Delete Note' button. When clicked, it should call a backend deleteNote function (to be added to backend/main.mo) that removes the note by its title/ID. After successful deletion, redirect the user back to the Browse Notes page. Add a confirmation dialog before deleting.",
+      "target": "both",
+      "source": {
+        "messageIds": [
+          "msg-13"
+        ],
+        "quotes": [
+          "If I wana delete my notes"
+        ]
+      },
+      "acceptanceCriteria": [
+        "A 'Delete Note' button is visible on the Note Detail page",
+        "Clicking the button shows a confirmation dialog before proceeding",
+        "Confirming deletion calls the backend and removes the note from the data store",
+        "After successful deletion, the user is redirected to the Browse Notes page",
+        "The deleted note no longer appears in the Browse Notes listing",
+        "A deleteNote function exists in backend/main.mo that accepts a note identifier and removes the matching record"
+      ]
+    },
+    {
+      "id": "REQ-17",
+      "text": "Add a book upload form to the Books page (frontend/src/pages/BooksPage.tsx) or as a dedicated section/modal. The form should allow submitting a new book with fields: title, author, subject, description, access link (URL), and an optional cover image URL. On submission, the book is saved to the backend via the existing addBook function (or equivalent in backend/main.mo). The upload form should be accessible via an 'Upload Book' button on the Books page.",
+      "target": "both",
+      "source": {
+        "messageIds": [
+          "msg-13"
+        ],
+        "quotes": [
+          "for book upload give a option"
+        ]
+      },
+      "acceptanceCriteria": [
+        "An 'Upload Book' button is visible on the Books page",
+        "Clicking the button reveals a form with fields: title, author, subject, description, access link, and optional cover image URL",
+        "All required fields are validated before submission",
+        "Submitting the form calls the backend addBook function and saves the book",
+        "The newly uploaded book appears in the Books listing after submission",
+        "A success message or toast is shown after successful upload"
+      ]
+    },
+    {
+      "id": "REQ-18",
+      "text": "Add an 'Open Note' button/option on each NoteCard (frontend/src/components/NoteCard.tsx) and on the Note Detail page (frontend/src/pages/NoteDetailPage.tsx). For notes with a PDF attachment (pdfBase64 present), 'Open Note' should open the PDF inline in a new browser tab using a Base64 data URI. For notes with only text content, 'Open Note' should navigate to the Note Detail page where the full text content is displayed.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-13"
+        ],
+        "quotes": [
+          "also give open option to open notes"
+        ]
+      },
+      "acceptanceCriteria": [
+        "An 'Open Note' button is present on each NoteCard in the Browse Notes grid",
+        "For notes with a PDF, clicking 'Open Note' opens the PDF in a new browser tab using a Base64 data URI",
+        "For text-only notes, clicking 'Open Note' navigates to the Note Detail page",
+        "The Note Detail page clearly displays the full text content for text-only notes",
+        "The 'Open Note' action works correctly on both the NoteCard component and the Note Detail page"
+      ]
+    }
+  ],
+  "constraints": [
+    "Do not modify files listed in frontend.immutablePaths",
+    "All Motoko logic must remain in backend/main.mo as a single actor",
+    "Delete functionality should only remove notes, not important notes or books, unless explicitly requested"
+  ],
+  "nonGoals": [
+    "User authentication or ownership verification for delete (any user can delete for now)",
+    "Delete functionality for important notes or books",
+    "PDF upload for books (only URL-based access links)",
+    "Real-time updates or WebSocket notifications"
+  ],
+  "imageRequirements": {
+    "required": [],
+    "edits": []
+  }
+}

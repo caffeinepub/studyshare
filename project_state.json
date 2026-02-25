@@ -1,0 +1,212 @@
+{
+  "schemaVersion": "1.0.0",
+  "projectStateVersion": 9,
+  "summary": "A study website where students can share notes, access important notes, and find books.",
+  "architectural_notes": [
+    "Study platform with user-generated content (notes) and curated resources (books, important notes)"
+  ],
+  "known_issues": [
+    "Note sharing feature is broken/not working for users"
+  ],
+  "isFixRequest": true,
+  "existing_features": [
+    {
+      "id": "feature-design-and-apply-a-cohesive-visual-theme-across-the-entire-app-warm-academic-tones-e-g-deep-teal-amber-off-white-clean-sans-serif-typography-card-based-layout-and-subtle-paper-notebook-inspired-textures-or-accents-apply-consistently-to-all-pages-and-components",
+      "title": "Design and apply a cohesive visual theme across the entire app: warm academic tones (e.g., deep teal, amber, off-white), clean sans-serif typography, card-based layout, and subtle paper/notebook-inspired textures or accents. Apply consistently to all pages and components.",
+      "reqIds": [
+        "REQ-1"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-build-a-share-notes-page-where-students-can-upload-a-note-by-filling-in-a-form-title-subject-description-content-file-text-uploaded-notes-are-submitted-to-the-backend-and-appear-in-the-notes-listing",
+      "title": "Build a 'Share Notes' page where students can upload a note by filling in a form (title, subject, description, content/file text). Uploaded notes are submitted to the backend and appear in the notes listing.",
+      "reqIds": [
+        "REQ-3"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-build-a-browse-notes-page-that-lists-all-student-shared-notes-as-cards-showing-title-subject-uploader-name-and-upload-date-clicking-a-card-opens-the-full-note-content-include-a-subject-category-filter-and-a-search-bar-by-title",
+      "title": "Build a 'Browse Notes' page that lists all student-shared notes as cards showing title, subject, uploader name, and upload date. Clicking a card opens the full note content. Include a subject/category filter and a search bar by title.",
+      "reqIds": [
+        "REQ-4"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-build-an-important-notes-page-displaying-curated-important-notes-featured-notes-appear-in-a-highlighted-section-at-the-top-each-note-card-shows-title-subject-and-a-preview-of-content-clicking-opens-the-full-note",
+      "title": "Build an 'Important Notes' page displaying curated important notes. Featured notes appear in a highlighted section at the top. Each note card shows title, subject, and a preview of content. Clicking opens the full note.",
+      "reqIds": [
+        "REQ-6"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-build-a-books-page-where-students-can-browse-available-study-books-displayed-as-cards-cover-placeholder-or-icon-title-author-subject-description-include-subject-filter-and-search-by-title-each-card-has-an-access-book-button-linking-to-the-resource",
+      "title": "Build a 'Books' page where students can browse available study books displayed as cards (cover placeholder or icon, title, author, subject, description). Include subject filter and search by title. Each card has an 'Access Book' button linking to the resource.",
+      "reqIds": [
+        "REQ-8"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-build-a-home-landing-page-with-a-hero-section-introducing-the-platform-quick-access-cards-buttons-for-browse-notes-important-notes-and-books-and-a-stats-section-showing-total-notes-shared-and-total-books-available",
+      "title": "Build a Home/Landing page with a hero section introducing the platform, quick-access cards/buttons for 'Browse Notes', 'Important Notes', and 'Books', and a stats section showing total notes shared and total books available.",
+      "reqIds": [
+        "REQ-9"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-a-top-navigation-bar-with-the-app-logo-name-studyhub-links-to-home-browse-notes-share-notes-important-notes-and-books-pages",
+      "title": "Implement a top navigation bar with the app logo/name 'StudyHub', links to Home, Browse Notes, Share Notes, Important Notes, and Books pages.",
+      "reqIds": [
+        "REQ-10"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-generate-a-logo-banner-image-for-studyhub-and-a-decorative-hero-background-image-for-use-on-the-landing-page",
+      "title": "Generate a logo/banner image for StudyHub and a decorative hero background image for use on the landing page.",
+      "reqIds": [
+        "REQ-11"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-the-share-notes-page-frontend-src-pages-sharenotespage-tsx-to-add-a-pdf-file-upload-input-students-should-be-able-to-either-type-note-content-in-the-existing-text-area-or-upload-a-pdf-file-or-both-the-selected-pdf-file-should-be-read-as-base64-and-submitted-along-with-the-note-form-display-the-selected-filename-near-the-upload-input-the-useaddnote-mutation-in-usequeries-ts-must-be-updated-to-pass-the-new-pdf-fields-to-the-backend",
+      "title": "Update the Share Notes page (frontend/src/pages/ShareNotesPage.tsx) to add a PDF file upload input. Students should be able to either type note content in the existing text area OR upload a PDF file (or both). The selected PDF file should be read as Base64 and submitted along with the note form. Display the selected filename near the upload input. The useAddNote mutation in useQueries.ts must be updated to pass the new PDF fields to the backend.",
+      "reqIds": [
+        "REQ-13"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-the-note-detail-page-frontend-src-pages-notedetailpage-tsx-to-display-a-pdf-viewer-or-download-link-when-a-note-has-an-associated-pdf-if-a-pdfbase64-field-is-present-render-a-download-button-labeled-download-pdf-that-triggers-a-browser-download-of-the-pdf-file-using-the-stored-filename-optionally-embed-an-inline-pdf-preview-using-an-iframe-or-embed-with-a-base64-data-uri",
+      "title": "Update the Note Detail page (frontend/src/pages/NoteDetailPage.tsx) to display a PDF viewer or download link when a note has an associated PDF. If a pdfBase64 field is present, render a download button labeled 'Download PDF' that triggers a browser download of the PDF file using the stored filename. Optionally embed an inline PDF preview using an <iframe> or <embed> with a Base64 data URI.",
+      "reqIds": [
+        "REQ-14"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-a-developer-credit-section-on-the-home-page-frontend-src-pages-homepage-tsx-displaying-the-text-developed-by-sahil-kumar-style-it-consistently-with-the-existing-warm-academic-theme-place-it-in-a-subtle-visually-appropriate-area-such-as-near-the-bottom-of-the-page-or-below-the-stats-section-using-muted-tones-that-complement-the-existing-design",
+      "title": "Add a developer credit section on the Home page (frontend/src/pages/HomePage.tsx) displaying the text 'Developed by Sahil Kumar'. Style it consistently with the existing warm academic theme — place it in a subtle, visually appropriate area such as near the bottom of the page or below the stats section, using muted tones that complement the existing design.",
+      "reqIds": [
+        "REQ-15"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-a-delete-note-feature-on-the-note-detail-page-frontend-src-pages-notedetailpage-tsx-display-a-delete-note-button-when-clicked-it-should-call-a-backend-deletenote-function-to-be-added-to-backend-main-mo-that-removes-the-note-by-its-title-id-after-successful-deletion-redirect-the-user-back-to-the-browse-notes-page-add-a-confirmation-dialog-before-deleting",
+      "title": "Add a delete note feature: on the Note Detail page (frontend/src/pages/NoteDetailPage.tsx), display a 'Delete Note' button. When clicked, it should call a backend deleteNote function (to be added to backend/main.mo) that removes the note by its title/ID. After successful deletion, redirect the user back to the Browse Notes page. Add a confirmation dialog before deleting.",
+      "reqIds": [
+        "REQ-16"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-a-book-upload-form-to-the-books-page-frontend-src-pages-bookspage-tsx-or-as-a-dedicated-section-modal-the-form-should-allow-submitting-a-new-book-with-fields-title-author-subject-description-access-link-url-and-an-optional-cover-image-url-on-submission-the-book-is-saved-to-the-backend-via-the-existing-addbook-function-or-equivalent-in-backend-main-mo-the-upload-form-should-be-accessible-via-an-upload-book-button-on-the-books-page",
+      "title": "Add a book upload form to the Books page (frontend/src/pages/BooksPage.tsx) or as a dedicated section/modal. The form should allow submitting a new book with fields: title, author, subject, description, access link (URL), and an optional cover image URL. On submission, the book is saved to the backend via the existing addBook function (or equivalent in backend/main.mo). The upload form should be accessible via an 'Upload Book' button on the Books page.",
+      "reqIds": [
+        "REQ-17"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-an-open-note-button-option-on-each-notecard-frontend-src-components-notecard-tsx-and-on-the-note-detail-page-frontend-src-pages-notedetailpage-tsx-for-notes-with-a-pdf-attachment-pdfbase64-present-open-note-should-open-the-pdf-inline-in-a-new-browser-tab-using-a-base64-data-uri-for-notes-with-only-text-content-open-note-should-navigate-to-the-note-detail-page-where-the-full-text-content-is-displayed",
+      "title": "Add an 'Open Note' button/option on each NoteCard (frontend/src/components/NoteCard.tsx) and on the Note Detail page (frontend/src/pages/NoteDetailPage.tsx). For notes with a PDF attachment (pdfBase64 present), 'Open Note' should open the PDF inline in a new browser tab using a Base64 data URI. For notes with only text content, 'Open Note' should navigate to the Note Detail page where the full text content is displayed.",
+      "reqIds": [
+        "REQ-18"
+      ],
+      "version": 1
+    }
+  ],
+  "new_feature_requests": [
+    {
+      "id": "AR-1",
+      "summary": "Student note sharing - upload and share notes with other students",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-2",
+      "summary": "Important notes section - curated/highlighted important notes for students",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-3",
+      "summary": "Books section - students can browse and access study books",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-5",
+      "summary": "Create a backend data model and API for student-uploaded notes. Each note must store: title, subject/category, description, file content (as text or base64), uploader name, upload timestamp, and a view/download count.",
+      "reqIds": [
+        "REQ-2"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-8",
+      "summary": "Create a backend data model and API for 'Important Notes' — curated notes manually added by an admin/author. Each important note must store: title, subject, content, a boolean 'featured' flag, and creation timestamp.",
+      "reqIds": [
+        "REQ-5"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-10",
+      "summary": "Create a backend data model and API for Books. Each book entry must store: title, author, subject/category, description, cover image URL (optional), download/access link (URL or text), and an 'important' boolean flag.",
+      "reqIds": [
+        "REQ-7"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-11",
+      "summary": "Add PDF upload option to the Share Notes page so students can upload PDF files as note content",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-12",
+      "summary": "Update the backend Note data type and addNote function to accept an optional PDF file stored as Base64-encoded text alongside the existing text content field. The Note record should include a new optional field (e.g., `pdfContent: ?Text` or `pdfBase64: ?Text`) and a filename field (e.g., `pdfFileName: ?Text`) so the frontend can store and retrieve uploaded PDF data.",
+      "reqIds": [
+        "REQ-12"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-13",
+      "summary": "Add developer credit 'Sahil Kumar' on the front/home page",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-14",
+      "summary": "Add delete functionality so students can delete their own uploaded notes",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-15",
+      "summary": "Add book upload option so admins/users can upload books to the platform",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-16",
+      "summary": "Add an 'Open' option to view/open notes directly in the browser",
+      "reqIds": [],
+      "status": "pending"
+    }
+  ],
+  "gameProjectType": "none",
+  "projectName": "StudyShare",
+  "clarification_mode": "instant",
+  "clarification_rounds": 0
+}

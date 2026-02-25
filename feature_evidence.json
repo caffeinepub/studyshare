@@ -1,0 +1,61 @@
+{
+  "kind": "feature_evidence_report",
+  "features": [
+    {
+      "featureId": "feature-add-a-delete-note-feature-on-the-note-detail-page-frontend-src-pages-notedetailpage-tsx-display-a-delete-note-button-when-clicked-it-should-call-a-backend-deletenote-function-to-be-added-to-backend-main-mo-that-removes-the-note-by-its-title-id-after-successful-deletion-redirect-the-user-back-to-the-browse-notes-page-add-a-confirmation-dialog-before-deleting",
+      "featureTitle": "Add a delete note feature: on the Note Detail page (frontend/src/pages/NoteDetailPage.tsx), display a 'Delete Note' button. When clicked, it should call a backend deleteNote function (to be added to backend/main.mo) that removes the note by its title/ID. After successful deletion, redirect the user back to the Browse Notes page. Add a confirmation dialog before deleting.",
+      "files": [
+        "frontend/src/hooks/useQueries.ts",
+        "frontend/src/pages/NoteDetailPage.tsx"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-16"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-add-a-book-upload-form-to-the-books-page-frontend-src-pages-bookspage-tsx-or-as-a-dedicated-section-modal-the-form-should-allow-submitting-a-new-book-with-fields-title-author-subject-description-access-link-url-and-an-optional-cover-image-url-on-submission-the-book-is-saved-to-the-backend-via-the-existing-addbook-function-or-equivalent-in-backend-main-mo-the-upload-form-should-be-accessible-via-an-upload-book-button-on-the-books-page",
+      "featureTitle": "Add a book upload form to the Books page (frontend/src/pages/BooksPage.tsx) or as a dedicated section/modal. The form should allow submitting a new book with fields: title, author, subject, description, access link (URL), and an optional cover image URL. On submission, the book is saved to the backend via the existing addBook function (or equivalent in backend/main.mo). The upload form should be accessible via an 'Upload Book' button on the Books page.",
+      "files": [
+        "frontend/src/pages/BooksPage.tsx"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-17"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-add-an-open-note-button-option-on-each-notecard-frontend-src-components-notecard-tsx-and-on-the-note-detail-page-frontend-src-pages-notedetailpage-tsx-for-notes-with-a-pdf-attachment-pdfbase64-present-open-note-should-open-the-pdf-inline-in-a-new-browser-tab-using-a-base64-data-uri-for-notes-with-only-text-content-open-note-should-navigate-to-the-note-detail-page-where-the-full-text-content-is-displayed",
+      "featureTitle": "Add an 'Open Note' button/option on each NoteCard (frontend/src/components/NoteCard.tsx) and on the Note Detail page (frontend/src/pages/NoteDetailPage.tsx). For notes with a PDF attachment (pdfBase64 present), 'Open Note' should open the PDF inline in a new browser tab using a Base64 data URI. For notes with only text content, 'Open Note' should navigate to the Note Detail page where the full text content is displayed.",
+      "files": [
+        "frontend/src/components/NoteCard.tsx",
+        "frontend/src/pages/NoteDetailPage.tsx"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-18"
+      ],
+      "confidence": "high"
+    }
+  ]
+}

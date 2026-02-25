@@ -1,0 +1,73 @@
+{
+  "kind": "implementation_plan",
+  "version": "1.0",
+  "title": "Delete Notes, Book Upload, and Open Notes in Browser",
+  "requirements": [
+    {
+      "id": "REQ-16",
+      "summary": "Add delete note functionality with confirmation dialog on Note Detail page",
+      "acceptanceCriteria": [
+        "A 'Delete Note' button is visible on the Note Detail page",
+        "Clicking the button shows a confirmation dialog before proceeding",
+        "Confirming deletion calls the backend and removes the note from the data store",
+        "After successful deletion, the user is redirected to the Browse Notes page",
+        "The deleted note no longer appears in the Browse Notes listing",
+        "A deleteNote function exists in backend/main.mo that accepts a note identifier and removes the matching record"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/hooks/useQueries.ts",
+          "operation": "modify",
+          "description": "Add a useDeleteNote mutation hook that calls the backend deleteNote method passing the note title, invalidates the notes query cache on success, and provides error handling"
+        },
+        {
+          "path": "frontend/src/pages/NoteDetailPage.tsx",
+          "operation": "modify",
+          "description": "Add a 'Delete Note' button below the metadata section. Import and use the useDeleteNote mutation hook. Implement a confirmation dialog (using shadcn/ui Dialog or AlertDialog component) that appears when the delete button is clicked. On confirmation, call the deleteNote mutation with the note title, then navigate to /browse-notes using TanStack Router's useNavigate on success. Display loading state during deletion and show error toast if deletion fails"
+        }
+      ]
+    },
+    {
+      "id": "REQ-17",
+      "summary": "Add book upload form to Books page allowing submission of new books",
+      "acceptanceCriteria": [
+        "An 'Upload Book' button is visible on the Books page",
+        "Clicking the button reveals a form with fields: title, author, subject, description, access link, and optional cover image URL",
+        "All required fields are validated before submission",
+        "Submitting the form calls the backend addBook function and saves the book",
+        "The newly uploaded book appears in the Books listing after submission",
+        "A success message or toast is shown after successful upload"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/pages/BooksPage.tsx",
+          "operation": "modify",
+          "description": "Add an 'Upload Book' button near the page header. Implement a Dialog or Sheet component (using shadcn/ui) containing a form with fields for title (text input), author (text input), subject (select/combobox matching existing subjects), description (textarea), access link/download link (URL input), and optional cover image URL (text input). Mark title, author, subject, description, and access link as required. Use the existing useAddBook mutation hook from useQueries.ts to submit the form. On successful submission, close the dialog, show a success toast, and the mutation should automatically invalidate and refetch the books list. Include form validation and display loading state on the submit button during submission"
+        }
+      ]
+    },
+    {
+      "id": "REQ-18",
+      "summary": "Add 'Open Note' functionality to view PDFs inline or navigate to full text content",
+      "acceptanceCriteria": [
+        "An 'Open Note' button is present on each NoteCard in the Browse Notes grid",
+        "For notes with a PDF, clicking 'Open Note' opens the PDF in a new browser tab using a Base64 data URI",
+        "For text-only notes, clicking 'Open Note' navigates to the Note Detail page",
+        "The Note Detail page clearly displays the full text content for text-only notes",
+        "The 'Open Note' action works correctly on both the NoteCard component and the Note Detail page"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/NoteCard.tsx",
+          "operation": "modify",
+          "description": "Add an 'Open Note' button to the card's action area. Import useNavigate from TanStack Router. Implement a handleOpenNote function that checks if note.pdfContent exists: if present, construct a Base64 data URI (data:application/pdf;base64,{pdfContent}) and open it in a new tab using window.open; if pdfContent is null or undefined, navigate to the note detail page (/notes/{note.title}). Position the button alongside or near existing card actions"
+        },
+        {
+          "path": "frontend/src/pages/NoteDetailPage.tsx",
+          "operation": "modify",
+          "description": "Add an 'Open Note' button in the action section. Implement similar logic as NoteCard: if note.pdfContent exists, open the PDF in a new tab using a Base64 data URI; otherwise, if the user is already on the detail page and no PDF exists, show a message or keep the button disabled. Ensure the full text content (note.fileContent) is prominently displayed in a readable format (e.g., whitespace-pre-wrap in a Card or dedicated content section) for text-only notes. Update the existing Download PDF button visibility logic to only show when pdfContent is present"
+        }
+      ]
+    }
+  ]
+}
