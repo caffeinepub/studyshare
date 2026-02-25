@@ -9,13 +9,12 @@
 import { IDL } from '@icp-sdk/core/candid';
 
 export const Book = IDL.Record({
-  'coverImageUrl' : IDL.Opt(IDL.Text),
   'title' : IDL.Text,
   'subject' : IDL.Text,
-  'downloadLink' : IDL.Text,
   'description' : IDL.Text,
-  'important' : IDL.Bool,
   'author' : IDL.Text,
+  'pdfBase64' : IDL.Opt(IDL.Text),
+  'pdfFileName' : IDL.Opt(IDL.Text),
 });
 export const Time = IDL.Int;
 export const ImportantNote = IDL.Record({
@@ -45,8 +44,7 @@ export const idlService = IDL.Service({
         IDL.Text,
         IDL.Text,
         IDL.Opt(IDL.Text),
-        IDL.Text,
-        IDL.Bool,
+        IDL.Opt(IDL.Text),
       ],
       [],
       [],
@@ -80,7 +78,6 @@ export const idlService = IDL.Service({
       [IDL.Vec(ImportantNote)],
       ['query'],
     ),
-  'getImportantBooks' : IDL.Func([], [IDL.Vec(Book)], ['query']),
   'getImportantNote' : IDL.Func([IDL.Text], [ImportantNote], ['query']),
   'getNote' : IDL.Func([IDL.Text], [Note], ['query']),
   'getNotesBySubject' : IDL.Func([IDL.Text], [IDL.Vec(Note)], ['query']),
@@ -90,13 +87,12 @@ export const idlInitArgs = [];
 
 export const idlFactory = ({ IDL }) => {
   const Book = IDL.Record({
-    'coverImageUrl' : IDL.Opt(IDL.Text),
     'title' : IDL.Text,
     'subject' : IDL.Text,
-    'downloadLink' : IDL.Text,
     'description' : IDL.Text,
-    'important' : IDL.Bool,
     'author' : IDL.Text,
+    'pdfBase64' : IDL.Opt(IDL.Text),
+    'pdfFileName' : IDL.Opt(IDL.Text),
   });
   const Time = IDL.Int;
   const ImportantNote = IDL.Record({
@@ -126,8 +122,7 @@ export const idlFactory = ({ IDL }) => {
           IDL.Text,
           IDL.Text,
           IDL.Opt(IDL.Text),
-          IDL.Text,
-          IDL.Bool,
+          IDL.Opt(IDL.Text),
         ],
         [],
         [],
@@ -161,7 +156,6 @@ export const idlFactory = ({ IDL }) => {
         [IDL.Vec(ImportantNote)],
         ['query'],
       ),
-    'getImportantBooks' : IDL.Func([], [IDL.Vec(Book)], ['query']),
     'getImportantNote' : IDL.Func([IDL.Text], [ImportantNote], ['query']),
     'getNote' : IDL.Func([IDL.Text], [Note], ['query']),
     'getNotesBySubject' : IDL.Func([IDL.Text], [IDL.Vec(Note)], ['query']),

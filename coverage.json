@@ -1,50 +1,37 @@
 {
   "kind": "coverage_report",
   "version": "1.0",
-  "generatedAt": "2026-02-25T13:34:38.817Z",
+  "generatedAt": "2026-02-25T13:44:43.474Z",
   "sources": {
     "buildRequest": true,
     "implementationPlan": true
   },
   "requirements": {
-    "total": 3,
-    "implemented": 3,
+    "total": 2,
+    "implemented": 2,
     "items": [
       {
-        "id": "REQ-16",
-        "summary": "Add a delete note feature: on the Note Detail page (frontend/src/pages/NoteDetailPage.tsx), display a 'Delete Note' button. When clicked, it should call a backend deleteNote function (to be added to backend/main.mo) that removes the note by its title/ID. After successful deletion, redirect the user back to the Browse Notes page. Add a confirmation dialog before deleting.",
+        "id": "REQ-19",
+        "summary": "Update the Book upload form in BooksPage.tsx to remove the 'Access Link (URL)' and 'Cover Image URL' fields. Replace them with a PDF file upload input. The selected PDF should be read as Base64 and stored in the backend. Display the selected filename near the upload input. The form should retain fields for title, author, subject, and description. Update the useAddBook mutation in useQueries.ts to pass the pdfBase64 and pdfFileName fields instead of the URL fields.",
         "status": "implemented",
         "plannedFiles": [
-          "frontend/src/hooks/useQueries.ts",
-          "frontend/src/pages/NoteDetailPage.tsx"
+          "frontend/src/pages/BooksPage.tsx",
+          "frontend/src/hooks/useQueries.ts"
         ],
         "matchedFiles": [
-          "frontend/src/hooks/useQueries.ts",
-          "frontend/src/pages/NoteDetailPage.tsx"
+          "frontend/src/pages/BooksPage.tsx",
+          "frontend/src/hooks/useQueries.ts"
         ]
       },
       {
-        "id": "REQ-17",
-        "summary": "Add a book upload form to the Books page (frontend/src/pages/BooksPage.tsx) or as a dedicated section/modal. The form should allow submitting a new book with fields: title, author, subject, description, access link (URL), and an optional cover image URL. On submission, the book is saved to the backend via the existing addBook function (or equivalent in backend/main.mo). The upload form should be accessible via an 'Upload Book' button on the Books page.",
+        "id": "REQ-20",
+        "summary": "Update the backend Book type in backend/main.mo to replace or supplement the existing accessLink and coverImageUrl fields with optional pdfBase64 and pdfFileName fields (e.g., `pdfBase64: ?Text`, `pdfFileName: ?Text`). Update the addBook function signature accordingly. Update the BookCard component (frontend/src/components/BookCard.tsx) to replace the 'Access Book' button (which opened a URL) with an 'Open Book' button that opens the stored PDF inline in a new browser tab using a Base64 data URI, when a pdfBase64 value is present.",
         "status": "implemented",
         "plannedFiles": [
-          "frontend/src/pages/BooksPage.tsx"
+          "frontend/src/components/BookCard.tsx"
         ],
         "matchedFiles": [
-          "frontend/src/pages/BooksPage.tsx"
-        ]
-      },
-      {
-        "id": "REQ-18",
-        "summary": "Add an 'Open Note' button/option on each NoteCard (frontend/src/components/NoteCard.tsx) and on the Note Detail page (frontend/src/pages/NoteDetailPage.tsx). For notes with a PDF attachment (pdfBase64 present), 'Open Note' should open the PDF inline in a new browser tab using a Base64 data URI. For notes with only text content, 'Open Note' should navigate to the Note Detail page where the full text content is displayed.",
-        "status": "implemented",
-        "plannedFiles": [
-          "frontend/src/components/NoteCard.tsx",
-          "frontend/src/pages/NoteDetailPage.tsx"
-        ],
-        "matchedFiles": [
-          "frontend/src/components/NoteCard.tsx",
-          "frontend/src/pages/NoteDetailPage.tsx"
+          "frontend/src/components/BookCard.tsx"
         ]
       }
     ]
@@ -58,12 +45,12 @@
     "frontend-implementation-plan.json",
     "frontend/src/backend.d.ts",
     "frontend/src/backend.ts",
-    "frontend/src/components/NoteCard.tsx",
+    "frontend/src/components/BookCard.tsx",
     "frontend/src/declarations/backend.did.d.ts",
     "frontend/src/declarations/backend.did.js",
     "frontend/src/hooks/useQueries.ts",
     "frontend/src/pages/BooksPage.tsx",
-    "frontend/src/pages/NoteDetailPage.tsx",
+    "frontend/src/pages/HomePage.tsx",
     "project_state.json",
     "scratch/component-selection.json",
     "spec.md",

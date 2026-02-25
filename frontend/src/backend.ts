@@ -97,13 +97,12 @@ export interface ImportantNote {
     creationTimestamp: Time;
 }
 export interface Book {
-    coverImageUrl?: string;
     title: string;
     subject: string;
-    downloadLink: string;
     description: string;
-    important: boolean;
     author: string;
+    pdfBase64?: string;
+    pdfFileName?: string;
 }
 export type Time = bigint;
 export interface Note {
@@ -118,7 +117,7 @@ export interface Note {
     pdfFileName?: string;
 }
 export interface backendInterface {
-    addBook(title: string, author: string, subject: string, description: string, coverImageUrl: string | null, downloadLink: string, important: boolean): Promise<void>;
+    addBook(title: string, author: string, subject: string, description: string, pdfBase64: string | null, pdfFileName: string | null): Promise<void>;
     addImportantNote(title: string, subject: string, content: string, featured: boolean): Promise<void>;
     addNote(title: string, subject: string, description: string, fileContent: string, uploaderName: string, pdfContent: string | null, pdfFileName: string | null): Promise<void>;
     addViewCount(title: string): Promise<void>;
@@ -128,7 +127,6 @@ export interface backendInterface {
     getAllNotes(): Promise<Array<Note>>;
     getBook(title: string): Promise<Book>;
     getFeaturedImportantNotes(): Promise<Array<ImportantNote>>;
-    getImportantBooks(): Promise<Array<Book>>;
     getImportantNote(title: string): Promise<ImportantNote>;
     getNote(title: string): Promise<Note>;
     getNotesBySubject(subject: string): Promise<Array<Note>>;
@@ -136,17 +134,17 @@ export interface backendInterface {
 import type { Book as _Book, Note as _Note, Time as _Time } from "./declarations/backend.did.d.ts";
 export class Backend implements backendInterface {
     constructor(private actor: ActorSubclass<_SERVICE>, private _uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, private _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, private processError?: (error: unknown) => never){}
-    async addBook(arg0: string, arg1: string, arg2: string, arg3: string, arg4: string | null, arg5: string, arg6: boolean): Promise<void> {
+    async addBook(arg0: string, arg1: string, arg2: string, arg3: string, arg4: string | null, arg5: string | null): Promise<void> {
         if (this.processError) {
             try {
-                const result = await this.actor.addBook(arg0, arg1, arg2, arg3, to_candid_opt_n1(this._uploadFile, this._downloadFile, arg4), arg5, arg6);
+                const result = await this.actor.addBook(arg0, arg1, arg2, arg3, to_candid_opt_n1(this._uploadFile, this._downloadFile, arg4), to_candid_opt_n1(this._uploadFile, this._downloadFile, arg5));
                 return result;
             } catch (e) {
                 this.processError(e);
                 throw new Error("unreachable");
             }
         } else {
-            const result = await this.actor.addBook(arg0, arg1, arg2, arg3, to_candid_opt_n1(this._uploadFile, this._downloadFile, arg4), arg5, arg6);
+            const result = await this.actor.addBook(arg0, arg1, arg2, arg3, to_candid_opt_n1(this._uploadFile, this._downloadFile, arg4), to_candid_opt_n1(this._uploadFile, this._downloadFile, arg5));
             return result;
         }
     }
@@ -276,20 +274,6 @@ export class Backend implements backendInterface {
             return result;
         }
     }
-    async getImportantBooks(): Promise<Array<Book>> {
-        if (this.processError) {
-            try {
-                const result = await this.actor.getImportantBooks();
-                return from_candid_vec_n2(this._uploadFile, this._downloadFile, result);
-            } catch (e) {
-                this.processError(e);
-                throw new Error("unreachable");
-            }
-        } else {
-            const result = await this.actor.getImportantBooks();
-            return from_candid_vec_n2(this._uploadFile, this._downloadFile, result);
-        }
-    }
     async getImportantNote(arg0: string): Promise<ImportantNote> {
         if (this.processError) {
             try {
@@ -343,30 +327,27 @@ function from_candid_opt_n5(_uploadFile: (file: ExternalBlob) => Promise<Uint8Ar
     return value.length === 0 ? null : value[0];
 }
 function from_candid_record_n4(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: {
-    coverImageUrl: [] | [string];
     title: string;
     subject: string;
-    downloadLink: string;
     description: string;
-    important: boolean;
     author: string;
+    pdfBase64: [] | [string];
+    pdfFileName: [] | [string];
 }): {
-    coverImageUrl?: string;
     title: string;
     subject: string;
-    downloadLink: string;
     description: string;
-    important: boolean;
     author: string;
+    pdfBase64?: string;
+    pdfFileName?: string;
 } {
     return {
-        coverImageUrl: record_opt_to_undefined(from_candid_opt_n5(_uploadFile, _downloadFile, value.coverImageUrl)),
         title: value.title,
         subject: value.subject,
-        downloadLink: value.downloadLink,
         description: value.description,
-        important: value.important,
-        author: value.author
+        author: value.author,
+        pdfBase64: record_opt_to_undefined(from_candid_opt_n5(_uploadFile, _downloadFile, value.pdfBase64)),
+        pdfFileName: record_opt_to_undefined(from_candid_opt_n5(_uploadFile, _downloadFile, value.pdfFileName))
     };
 }
 function from_candid_record_n8(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: {

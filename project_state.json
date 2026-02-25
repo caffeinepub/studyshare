@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.0.0",
-  "projectStateVersion": 9,
+  "projectStateVersion": 11,
   "summary": "A study website where students can share notes, access important notes, and find books.",
   "architectural_notes": [
     "Study platform with user-generated content (notes) and curated resources (books, important notes)"
@@ -8,7 +8,7 @@
   "known_issues": [
     "Note sharing feature is broken/not working for users"
   ],
-  "isFixRequest": true,
+  "isFixRequest": false,
   "existing_features": [
     {
       "id": "feature-design-and-apply-a-cohesive-visual-theme-across-the-entire-app-warm-academic-tones-e-g-deep-teal-amber-off-white-clean-sans-serif-typography-card-based-layout-and-subtle-paper-notebook-inspired-textures-or-accents-apply-consistently-to-all-pages-and-components",
@@ -121,6 +121,22 @@
         "REQ-18"
       ],
       "version": 1
+    },
+    {
+      "id": "feature-update-the-book-upload-form-in-bookspage-tsx-to-remove-the-access-link-url-and-cover-image-url-fields-replace-them-with-a-pdf-file-upload-input-the-selected-pdf-should-be-read-as-base64-and-stored-in-the-backend-display-the-selected-filename-near-the-upload-input-the-form-should-retain-fields-for-title-author-subject-and-description-update-the-useaddbook-mutation-in-usequeries-ts-to-pass-the-pdfbase64-and-pdffilename-fields-instead-of-the-url-fields",
+      "title": "Update the Book upload form in BooksPage.tsx to remove the 'Access Link (URL)' and 'Cover Image URL' fields. Replace them with a PDF file upload input. The selected PDF should be read as Base64 and stored in the backend. Display the selected filename near the upload input. The form should retain fields for title, author, subject, and description. Update the useAddBook mutation in useQueries.ts to pass the pdfBase64 and pdfFileName fields instead of the URL fields.",
+      "reqIds": [
+        "REQ-19"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-the-backend-book-type-in-backend-main-mo-to-replace-or-supplement-the-existing-accesslink-and-coverimageurl-fields-with-optional-pdfbase64-and-pdffilename-fields-e-g-pdfbase64-text-pdffilename-text-update-the-addbook-function-signature-accordingly-update-the-bookcard-component-frontend-src-components-bookcard-tsx-to-replace-the-access-book-button-which-opened-a-url-with-an-open-book-button-that-opens-the-stored-pdf-inline-in-a-new-browser-tab-using-a-base64-data-uri-when-a-pdfbase64-value-is-present",
+      "title": "Update the backend Book type in backend/main.mo to replace or supplement the existing accessLink and coverImageUrl fields with optional pdfBase64 and pdfFileName fields (e.g., `pdfBase64: ?Text`, `pdfFileName: ?Text`). Update the addBook function signature accordingly. Update the BookCard component (frontend/src/components/BookCard.tsx) to replace the 'Access Book' button (which opened a URL) with an 'Open Book' button that opens the stored PDF inline in a new browser tab using a Base64 data URI, when a pdfBase64 value is present.",
+      "reqIds": [
+        "REQ-20"
+      ],
+      "version": 1
     }
   ],
   "new_feature_requests": [
@@ -201,6 +217,12 @@
     {
       "id": "AR-16",
       "summary": "Add an 'Open' option to view/open notes directly in the browser",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-17",
+      "summary": "Change the book upload form to only use PDF file upload (remove URL/link fields), so books are uploaded as PDF files instead of external links",
       "reqIds": [],
       "status": "pending"
     }

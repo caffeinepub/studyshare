@@ -15,13 +15,12 @@ export interface ImportantNote {
     creationTimestamp: Time;
 }
 export interface Book {
-    coverImageUrl?: string;
     title: string;
     subject: string;
-    downloadLink: string;
     description: string;
-    important: boolean;
     author: string;
+    pdfBase64?: string;
+    pdfFileName?: string;
 }
 export type Time = bigint;
 export interface Note {
@@ -36,7 +35,7 @@ export interface Note {
     pdfFileName?: string;
 }
 export interface backendInterface {
-    addBook(title: string, author: string, subject: string, description: string, coverImageUrl: string | null, downloadLink: string, important: boolean): Promise<void>;
+    addBook(title: string, author: string, subject: string, description: string, pdfBase64: string | null, pdfFileName: string | null): Promise<void>;
     addImportantNote(title: string, subject: string, content: string, featured: boolean): Promise<void>;
     addNote(title: string, subject: string, description: string, fileContent: string, uploaderName: string, pdfContent: string | null, pdfFileName: string | null): Promise<void>;
     addViewCount(title: string): Promise<void>;
@@ -46,7 +45,6 @@ export interface backendInterface {
     getAllNotes(): Promise<Array<Note>>;
     getBook(title: string): Promise<Book>;
     getFeaturedImportantNotes(): Promise<Array<ImportantNote>>;
-    getImportantBooks(): Promise<Array<Book>>;
     getImportantNote(title: string): Promise<ImportantNote>;
     getNote(title: string): Promise<Note>;
     getNotesBySubject(subject: string): Promise<Array<Note>>;

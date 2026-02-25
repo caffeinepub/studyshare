@@ -30,15 +30,14 @@ actor {
     creationTimestamp : Time.Time;
   };
 
-  // Book structure
+  // Updated Book structure
   type Book = {
     title : Text;
     author : Text;
     subject : Text;
     description : Text;
-    coverImageUrl : ?Text;
-    downloadLink : Text;
-    important : Bool;
+    pdfBase64 : ?Text;
+    pdfFileName : ?Text;
   };
 
   module Note {
@@ -151,16 +150,15 @@ actor {
     importantNotes.values().toArray().sort();
   };
 
-  // Book functions
-  public shared ({ caller }) func addBook(title : Text, author : Text, subject : Text, description : Text, coverImageUrl : ?Text, downloadLink : Text, important : Bool) : async () {
+  // Updated Book functions
+  public shared ({ caller }) func addBook(title : Text, author : Text, subject : Text, description : Text, pdfBase64 : ?Text, pdfFileName : ?Text) : async () {
     let book : Book = {
       title;
       author;
       subject;
       description;
-      coverImageUrl;
-      downloadLink;
-      important;
+      pdfBase64;
+      pdfFileName;
     };
     books.add(title, book);
   };
@@ -170,10 +168,6 @@ actor {
       case (null) { Runtime.trap("Book not found") };
       case (?book) { book };
     };
-  };
-
-  public query ({ caller }) func getImportantBooks() : async [Book] {
-    books.values().toArray().filter(func(book) { book.important });
   };
 
   public query ({ caller }) func getAllBooks() : async [Book] {

@@ -1,27 +1,19 @@
 {
   "kind": "spec_vs_diff_report",
   "version": "1.0",
-  "generatedAt": "2026-02-25T13:34:38.813Z",
-  "summary": "All three requirements (REQ-16, REQ-17, REQ-18) appear to be implemented in the diff. REQ-16 adds a deleteNote backend function and a Delete Note button with confirmation dialog on the Note Detail page. REQ-17 adds an Upload Book button and form dialog on the Books page. REQ-18 adds an Open Note button on NoteCard and the Note Detail page. No significant missing requirements or hallucinated features were identified.",
+  "generatedAt": "2026-02-25T13:44:43.471Z",
+  "summary": "The diff implements both REQ-19 and REQ-20 with high fidelity. The backend Book type now includes pdfBase64 and pdfFileName fields, the addBook function is updated, migration.mo is added to handle the schema change, BookCard renders an 'Open Book' button using a Base64 data URI, and the BooksPage upload form replaces the URL fields with a PDF file upload input that reads the file as Base64, displays the filename, and retains all required text fields. The useAddBook mutation passes pdfBase64 and pdfFileName. No significant missing requirements or hallucinated features were found.",
   "missing_requirements": [],
-  "hallucinated_features": [
-    {
-      "description": "Book upload form includes an 'important' boolean checkbox field, which was not part of the REQ-17 specification.",
-      "reason": "REQ-17 specifies fields: title, author, subject, description, access link, and optional cover image URL. An 'important' flag was not requested but is present in the form state and submitted to the backend.",
-      "evidence": [
-        "frontend/src/pages/BooksPage.tsx"
-      ]
-    }
-  ],
-  "confidence": 0.88,
+  "hallucinated_features": [],
+  "confidence": 0.95,
   "changed_files": [
     "backend/main.mo",
     "backend/migration.mo",
     "frontend-file-summaries.txt",
-    "frontend/src/components/NoteCard.tsx",
+    "frontend/src/components/BookCard.tsx",
     "frontend/src/hooks/useQueries.ts",
     "frontend/src/pages/BooksPage.tsx",
-    "frontend/src/pages/NoteDetailPage.tsx",
+    "frontend/src/pages/HomePage.tsx",
     "project_state.json"
   ]
 }

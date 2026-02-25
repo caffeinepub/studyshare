@@ -1,71 +1,48 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "Delete Notes, Book Upload, and Open Notes in Browser",
+  "title": "Replace book upload form fields with PDF file upload only",
   "requirements": [
     {
-      "id": "REQ-16",
-      "summary": "Add delete note functionality with confirmation dialog on Note Detail page",
+      "id": "REQ-19",
+      "summary": "Update the Book upload form to remove URL fields and replace with PDF file upload, reading the file as Base64 and displaying the filename",
       "acceptanceCriteria": [
-        "A 'Delete Note' button is visible on the Note Detail page",
-        "Clicking the button shows a confirmation dialog before proceeding",
-        "Confirming deletion calls the backend and removes the note from the data store",
-        "After successful deletion, the user is redirected to the Browse Notes page",
-        "The deleted note no longer appears in the Browse Notes listing",
-        "A deleteNote function exists in backend/main.mo that accepts a note identifier and removes the matching record"
-      ],
-      "file_operations": [
-        {
-          "path": "frontend/src/hooks/useQueries.ts",
-          "operation": "modify",
-          "description": "Add a useDeleteNote mutation hook that calls the backend deleteNote method passing the note title, invalidates the notes query cache on success, and provides error handling"
-        },
-        {
-          "path": "frontend/src/pages/NoteDetailPage.tsx",
-          "operation": "modify",
-          "description": "Add a 'Delete Note' button below the metadata section. Import and use the useDeleteNote mutation hook. Implement a confirmation dialog (using shadcn/ui Dialog or AlertDialog component) that appears when the delete button is clicked. On confirmation, call the deleteNote mutation with the note title, then navigate to /browse-notes using TanStack Router's useNavigate on success. Display loading state during deletion and show error toast if deletion fails"
-        }
-      ]
-    },
-    {
-      "id": "REQ-17",
-      "summary": "Add book upload form to Books page allowing submission of new books",
-      "acceptanceCriteria": [
-        "An 'Upload Book' button is visible on the Books page",
-        "Clicking the button reveals a form with fields: title, author, subject, description, access link, and optional cover image URL",
-        "All required fields are validated before submission",
-        "Submitting the form calls the backend addBook function and saves the book",
-        "The newly uploaded book appears in the Books listing after submission",
-        "A success message or toast is shown after successful upload"
+        "The book upload form no longer shows an 'Access Link (URL)' input field",
+        "The book upload form no longer shows a 'Cover Image URL' input field",
+        "A PDF file upload input is present in the book upload form",
+        "Selecting a PDF file displays the filename near the upload input",
+        "The selected PDF file is read as Base64 before submission",
+        "Submitting the form sends pdfBase64 and pdfFileName to the backend via useAddBook",
+        "Title, author, subject, and description fields remain in the form"
       ],
       "file_operations": [
         {
           "path": "frontend/src/pages/BooksPage.tsx",
           "operation": "modify",
-          "description": "Add an 'Upload Book' button near the page header. Implement a Dialog or Sheet component (using shadcn/ui) containing a form with fields for title (text input), author (text input), subject (select/combobox matching existing subjects), description (textarea), access link/download link (URL input), and optional cover image URL (text input). Mark title, author, subject, description, and access link as required. Use the existing useAddBook mutation hook from useQueries.ts to submit the form. On successful submission, close the dialog, show a success toast, and the mutation should automatically invalidate and refetch the books list. Include form validation and display loading state on the submit button during submission"
+          "description": "Remove the 'Access Link (URL)' and 'Cover Image URL' input fields from the book upload form dialog. Add a PDF file upload input with type='file' accept='.pdf'. Add state to track the selected PDF file and its Base64 representation. When a PDF is selected, read it using FileReader as Base64 and store both the Base64 string and filename in component state. Display the selected filename next to the file input. Update the form submission handler to pass pdfBase64 and pdfFileName to the useAddBook mutation instead of the removed URL fields. Retain all existing fields: title, author, subject, and description."
+        },
+        {
+          "path": "frontend/src/hooks/useQueries.ts",
+          "operation": "modify",
+          "description": "Update the useAddBook mutation to accept pdfBase64 and pdfFileName parameters instead of accessLink and coverImageUrl. Pass these new parameters to the backend actor's addBook method, converting them to null if undefined to match the backend interface signature (string | null). Ensure the mutation invalidates the books query cache on success."
         }
       ]
     },
     {
-      "id": "REQ-18",
-      "summary": "Add 'Open Note' functionality to view PDFs inline or navigate to full text content",
+      "id": "REQ-20",
+      "summary": "Update BookCard to replace the 'Access Book' button with an 'Open Book' button that opens stored PDFs inline using Base64 data URI",
       "acceptanceCriteria": [
-        "An 'Open Note' button is present on each NoteCard in the Browse Notes grid",
-        "For notes with a PDF, clicking 'Open Note' opens the PDF in a new browser tab using a Base64 data URI",
-        "For text-only notes, clicking 'Open Note' navigates to the Note Detail page",
-        "The Note Detail page clearly displays the full text content for text-only notes",
-        "The 'Open Note' action works correctly on both the NoteCard component and the Note Detail page"
+        "The Book type in backend/main.mo includes pdfBase64: ?Text and pdfFileName: ?Text fields",
+        "The addBook function accepts pdfBase64 and pdfFileName parameters",
+        "BookCard renders an 'Open Book' button when pdfBase64 is present",
+        "Clicking 'Open Book' opens the PDF in a new browser tab using a Base64 data URI",
+        "The backend migration.mo is updated if the Book state shape changes"
       ],
       "file_operations": [
         {
-          "path": "frontend/src/components/NoteCard.tsx",
+          "path": "frontend/src/components/BookCard.tsx",
           "operation": "modify",
-          "description": "Add an 'Open Note' button to the card's action area. Import useNavigate from TanStack Router. Implement a handleOpenNote function that checks if note.pdfContent exists: if present, construct a Base64 data URI (data:application/pdf;base64,{pdfContent}) and open it in a new tab using window.open; if pdfContent is null or undefined, navigate to the note detail page (/notes/{note.title}). Position the button alongside or near existing card actions"
-        },
-        {
-          "path": "frontend/src/pages/NoteDetailPage.tsx",
-          "operation": "modify",
-          "description": "Add an 'Open Note' button in the action section. Implement similar logic as NoteCard: if note.pdfContent exists, open the PDF in a new tab using a Base64 data URI; otherwise, if the user is already on the detail page and no PDF exists, show a message or keep the button disabled. Ensure the full text content (note.fileContent) is prominently displayed in a readable format (e.g., whitespace-pre-wrap in a Card or dedicated content section) for text-only notes. Update the existing Download PDF button visibility logic to only show when pdfContent is present"
+          "description": "Replace the existing 'Access Book' button (which opens book.accessLink) with an 'Open Book' button. The button should only be enabled when book.pdfBase64 is present. On click, construct a Base64 data URI using the format 'data:application/pdf;base64,' + book.pdfBase64, then open it in a new browser tab using window.open(). Update the button text to 'Open Book' and adjust any conditional rendering logic to check for pdfBase64 instead of accessLink."
         }
       ]
     }

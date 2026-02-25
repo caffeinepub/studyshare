@@ -11,13 +11,12 @@ import type { IDL } from '@icp-sdk/core/candid';
 import type { Principal } from '@icp-sdk/core/principal';
 
 export interface Book {
-  'coverImageUrl' : [] | [string],
   'title' : string,
   'subject' : string,
-  'downloadLink' : string,
   'description' : string,
-  'important' : boolean,
   'author' : string,
+  'pdfBase64' : [] | [string],
+  'pdfFileName' : [] | [string],
 }
 export interface ImportantNote {
   'title' : string,
@@ -40,7 +39,7 @@ export interface Note {
 export type Time = bigint;
 export interface _SERVICE {
   'addBook' : ActorMethod<
-    [string, string, string, string, [] | [string], string, boolean],
+    [string, string, string, string, [] | [string], [] | [string]],
     undefined
   >,
   'addImportantNote' : ActorMethod<
@@ -58,7 +57,6 @@ export interface _SERVICE {
   'getAllNotes' : ActorMethod<[], Array<Note>>,
   'getBook' : ActorMethod<[string], Book>,
   'getFeaturedImportantNotes' : ActorMethod<[], Array<ImportantNote>>,
-  'getImportantBooks' : ActorMethod<[], Array<Book>>,
   'getImportantNote' : ActorMethod<[string], ImportantNote>,
   'getNote' : ActorMethod<[string], Note>,
   'getNotesBySubject' : ActorMethod<[string], Array<Note>>,

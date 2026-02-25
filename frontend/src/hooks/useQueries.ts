@@ -153,7 +153,7 @@ export function useAddImportantNote() {
         params.title,
         params.subject,
         params.content,
-        params.featured
+        params.featured,
       );
     },
     onSuccess: () => {
@@ -171,18 +171,6 @@ export function useGetAllBooks() {
     queryFn: async () => {
       if (!actor) return [];
       return actor.getAllBooks();
-    },
-    enabled: !!actor && !isFetching,
-  });
-}
-
-export function useGetImportantBooks() {
-  const { actor, isFetching } = useActor();
-  return useQuery<Book[]>({
-    queryKey: ['books', 'important'],
-    queryFn: async () => {
-      if (!actor) return [];
-      return actor.getImportantBooks();
     },
     enabled: !!actor && !isFetching,
   });
@@ -209,9 +197,8 @@ export function useAddBook() {
       author: string;
       subject: string;
       description: string;
-      coverImageUrl: string | null;
-      downloadLink: string;
-      important: boolean;
+      pdfBase64?: string | null;
+      pdfFileName?: string | null;
     }) => {
       if (!actor) throw new Error('Actor not ready');
       return actor.addBook(
@@ -219,9 +206,8 @@ export function useAddBook() {
         params.author,
         params.subject,
         params.description,
-        params.coverImageUrl,
-        params.downloadLink,
-        params.important
+        params.pdfBase64 ?? null,
+        params.pdfFileName ?? null,
       );
     },
     onSuccess: () => {

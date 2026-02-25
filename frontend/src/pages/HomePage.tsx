@@ -90,8 +90,8 @@ export default function HomePage() {
             />
             <StatCard
               icon={<Star className="w-5 h-5" />}
-              label="Curated Resources"
-              value={booksLoading ? null : (books?.filter(b => b.important).length ?? 0)}
+              label="Books with PDF"
+              value={booksLoading ? null : (books?.filter(b => !!b.pdfBase64).length ?? 0)}
               color="text-amber-600"
             />
             <StatCard

@@ -1,12 +1,11 @@
-import { useState, useMemo } from 'react';
-import { Search, BookOpen, SlidersHorizontal, Star, PlusCircle, Loader2 } from 'lucide-react';
+import { useState, useRef, useMemo } from 'react';
+import { Search, BookOpen, SlidersHorizontal, PlusCircle, Loader2, FileText, X } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Button } from '@/components/ui/button';
-import { Checkbox } from '@/components/ui/checkbox';
 import {
   Dialog,
   DialogContent,
@@ -39,9 +38,6 @@ interface BookFormState {
   author: string;
   subject: string;
   description: string;
-  accessLink: string;
-  coverImageUrl: string;
-  important: boolean;
 }
 
 const EMPTY_FORM: BookFormState = {
@@ -49,9 +45,6 @@ const EMPTY_FORM: BookFormState = {
   author: '',
   subject: '',
   description: '',
-  accessLink: '',
-  coverImageUrl: '',
-  important: false,
 };
 
 export default function BooksPage() {
@@ -60,10 +53,14 @@ export default function BooksPage() {
 
   const [search, setSearch] = useState('');
   const [subject, setSubject] = useState(ALL_SUBJECTS_OPTION);
-  const [showImportantOnly, setShowImportantOnly] = useState(false);
   const [uploadOpen, setUploadOpen] = useState(false);
   const [form, setForm] = useState<BookFormState>(EMPTY_FORM);
-  const [formErrors, setFormErrors] = useState<Partial<BookFormState>>({});
+  const [formErrors, setFormErrors] = useState<Partial<BookFormState & { pdf: string }>>({});
+
+  // PDF state
+  const [pdfFile, setPdfFile] = useState<File | null>(null);
+  const [pdfBase64, setPdfBase64] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const uniqueSubjects = useMemo(() => {
     if (!books) return [ALL_SUBJECTS_OPTION, ...SUBJECTS];
@@ -79,20 +76,42 @@ export default function BooksPage() {
         book.author.toLowerCase().includes(search.toLowerCase()) ||
         book.description.toLowerCase().includes(search.toLowerCase());
       const matchesSubject = subject === ALL_SUBJECTS_OPTION || book.subject === subject;
-      const matchesImportant = !showImportantOnly || book.important;
-      return matchesSearch && matchesSubject && matchesImportant;
+      return matchesSearch && matchesSubject;
     });
-  }, [books, search, subject, showImportantOnly]);
+  }, [books, search, subject]);
 
-  const importantCount = useMemo(() => books?.filter(b => b.important).length ?? 0, [books]);
+  function handlePdfChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (file.type !== 'application/pdf') {
+      setFormErrors(prev => ({ ...prev, pdf: 'Only PDF files are allowed.' }));
+      return;
+    }
+    setPdfFile(file);
+    setFormErrors(prev => ({ ...prev, pdf: undefined }));
+
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      const result = ev.target?.result as string;
+      // result is "data:application/pdf;base64,<base64string>"
+      const base64 = result.split(',')[1];
+      setPdfBase64(base64);
+    };
+    reader.readAsDataURL(file);
+  }
+
+  function removePdf() {
+    setPdfFile(null);
+    setPdfBase64(null);
+    if (fileInputRef.current) fileInputRef.current.value = '';
+  }
 
   function validateForm(): boolean {
-    const errors: Partial<BookFormState> = {};
+    const errors: Partial<BookFormState & { pdf: string }> = {};
     if (!form.title.trim()) errors.title = 'Title is required';
     if (!form.author.trim()) errors.author = 'Author is required';
     if (!form.subject) errors.subject = 'Subject is required';
     if (!form.description.trim()) errors.description = 'Description is required';
-    if (!form.accessLink.trim()) errors.accessLink = 'Access link is required';
     setFormErrors(errors);
     return Object.keys(errors).length === 0;
   }
@@ -107,15 +126,13 @@ export default function BooksPage() {
         author: form.author.trim(),
         subject: form.subject,
         description: form.description.trim(),
-        coverImageUrl: form.coverImageUrl.trim() || null,
-        downloadLink: form.accessLink.trim(),
-        important: form.important,
+        pdfBase64: pdfBase64 ?? null,
+        pdfFileName: pdfFile?.name ?? null,
       },
       {
         onSuccess: () => {
           toast.success(`"${form.title}" has been added to the library!`);
-          setForm(EMPTY_FORM);
-          setFormErrors({});
+          resetForm();
           setUploadOpen(false);
         },
         onError: () => {
@@ -125,11 +142,16 @@ export default function BooksPage() {
     );
   }
 
+  function resetForm() {
+    setForm(EMPTY_FORM);
+    setFormErrors({});
+    setPdfFile(null);
+    setPdfBase64(null);
+    if (fileInputRef.current) fileInputRef.current.value = '';
+  }
+
   function handleOpenChange(open: boolean) {
-    if (!open) {
-      setForm(EMPTY_FORM);
-      setFormErrors({});
-    }
+    if (!open) resetForm();
     setUploadOpen(open);
   }
 
@@ -184,23 +206,6 @@ export default function BooksPage() {
         </div>
       </div>
 
-      {/* Important filter toggle */}
-      {importantCount > 0 && (
-        <div className="flex items-center gap-2 mb-6">
-          <button
-            onClick={() => setShowImportantOnly(!showImportantOnly)}
-            className={`flex items-center gap-1.5 text-sm font-medium px-3 py-1.5 rounded-full border transition-colors ${
-              showImportantOnly
-                ? 'bg-accent text-accent-foreground border-accent'
-                : 'bg-card text-muted-foreground border-border hover:border-accent hover:text-accent'
-            }`}
-          >
-            <Star className={`w-3.5 h-3.5 ${showImportantOnly ? 'fill-current' : ''}`} />
-            Important Books ({importantCount})
-          </button>
-        </div>
-      )}
-
       {/* Results count */}
       {!isLoading && (
         <p className="text-sm text-muted-foreground mb-4">
@@ -249,7 +254,7 @@ export default function BooksPage() {
           <DialogHeader>
             <DialogTitle className="font-serif text-xl">Upload a Book</DialogTitle>
             <DialogDescription>
-              Add a new study book to the library. Fill in the details below.
+              Add a new study book to the library. Upload a PDF file along with the book details.
             </DialogDescription>
           </DialogHeader>
 
@@ -326,49 +331,55 @@ export default function BooksPage() {
               )}
             </div>
 
-            {/* Access Link */}
+            {/* PDF Upload */}
             <div className="space-y-1.5">
-              <Label htmlFor="book-link">
-                Access / Download Link <span className="text-destructive">*</span>
+              <Label htmlFor="book-pdf">
+                PDF File{' '}
+                <span className="text-muted-foreground text-xs">(optional)</span>
               </Label>
-              <Input
-                id="book-link"
-                type="url"
-                placeholder="https://example.com/book.pdf"
-                value={form.accessLink}
-                onChange={(e) => setForm(f => ({ ...f, accessLink: e.target.value }))}
-              />
-              {formErrors.accessLink && (
-                <p className="text-xs text-destructive">{formErrors.accessLink}</p>
+
+              {pdfFile ? (
+                <div className="flex items-center gap-3 p-3 bg-muted rounded-lg border border-border">
+                  <FileText className="w-5 h-5 text-primary shrink-0" />
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-medium text-foreground truncate">{pdfFile.name}</p>
+                    <p className="text-xs text-muted-foreground">
+                      {(pdfFile.size / 1024 / 1024).toFixed(2)} MB
+                    </p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={removePdf}
+                    className="p-1 rounded-md hover:bg-destructive/10 text-muted-foreground hover:text-destructive transition-colors"
+                    aria-label="Remove PDF"
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
+                </div>
+              ) : (
+                <label
+                  htmlFor="book-pdf"
+                  className="flex flex-col items-center justify-center gap-2 p-6 border-2 border-dashed border-border rounded-lg cursor-pointer hover:border-primary hover:bg-primary/5 transition-colors"
+                >
+                  <FileText className="w-8 h-8 text-muted-foreground" />
+                  <span className="text-sm text-muted-foreground text-center">
+                    Click to select a PDF file
+                  </span>
+                  <span className="text-xs text-muted-foreground/70">PDF only</span>
+                  <input
+                    id="book-pdf"
+                    ref={fileInputRef}
+                    type="file"
+                    accept=".pdf,application/pdf"
+                    className="sr-only"
+                    onChange={handlePdfChange}
+                  />
+                </label>
               )}
-            </div>
 
-            {/* Cover Image URL (optional) */}
-            <div className="space-y-1.5">
-              <Label htmlFor="book-cover">
-                Cover Image URL <span className="text-muted-foreground text-xs">(optional)</span>
-              </Label>
-              <Input
-                id="book-cover"
-                type="url"
-                placeholder="https://example.com/cover.jpg"
-                value={form.coverImageUrl}
-                onChange={(e) => setForm(f => ({ ...f, coverImageUrl: e.target.value }))}
-              />
-            </div>
-
-            {/* Important checkbox */}
-            <div className="flex items-center gap-2">
-              <Checkbox
-                id="book-important"
-                checked={form.important}
-                onCheckedChange={(checked) =>
-                  setForm(f => ({ ...f, important: checked === true }))
-                }
-              />
-              <Label htmlFor="book-important" className="cursor-pointer font-normal">
-                Mark as Important Book
-              </Label>
+              {formErrors.pdf && (
+                <p className="text-xs text-destructive">{formErrors.pdf}</p>
+              )}
             </div>
 
             <DialogFooter className="pt-2 gap-2">
